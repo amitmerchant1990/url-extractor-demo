@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Urlinfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UrlextractorController extends Controller
 {
@@ -41,12 +42,12 @@ class UrlextractorController extends Controller
                 //Get all meta tags and loop through them.
                 foreach($html->getElementsByTagName('meta') as $meta) {
                     //If the property attribute of the meta tag is og:image
-                    if($meta->getAttribute('property')=='og:image'){
+                    if($meta->getAttribute('property')=='og:image' || $meta->getAttribute('name')=='og:image'){
                         $meta_og_img = $meta->getAttribute('content');
                     }
 
                     //If the property attribute of the meta tag is og:title
-                    if($meta->getAttribute('property')=='og:title'){
+                    if($meta->getAttribute('property')=='og:title' || $meta->getAttribute('name')=='og:title'){
                         $meta_og_title = $meta->getAttribute('content');
                     }
 
@@ -63,7 +64,7 @@ class UrlextractorController extends Controller
                 if($meta_og_title == null){
                     $sites_html = trim(preg_replace('/\s+/', ' ', $sites_html)); // supports line breaks inside <title>
                     preg_match("/\<title\>(.*)\<\/title\>/i",$sites_html,$title); // ignore case
-                    $meta_og_title = $title[1];
+                    $meta_og_title = @$title[1];
                 }
 
                 /*
@@ -72,7 +73,8 @@ class UrlextractorController extends Controller
                  */
                 if($meta_og_img == null){
                     preg_match('@<img.+src="(.*)".*>@Uims', $sites_html, $matches);
-                    $meta_og_img = $matches[1];
+                    print_r($matches, true);
+                    $meta_og_img = @$matches[1];
                 }
 
                 /*
@@ -84,7 +86,7 @@ class UrlextractorController extends Controller
                     $start = strpos($sites_html, '<p>');
                     $end = strpos($sites_html, '</p>', $start);
                     $paragraph = substr($sites_html, $start, $end-$start+4);
-                    $meta_og_desc = $paragraph;
+                    $meta_og_desc = @$paragraph;
                 }
 
                 return json_encode(['meta_og_img'=>@$meta_og_img, 'meta_og_desc'=>@$meta_og_desc, 'meta_og_title'=>@$meta_og_title]);
@@ -102,9 +104,6 @@ class UrlextractorController extends Controller
                         . $e->getTraceAsString()
                     ]
                 ));
-            $responseObj = RestResponseFactory::error((object) array() , $e->getMessage());
-
-            return $responseObj->toJSON();
         }
     }
 
@@ -144,9 +143,6 @@ class UrlextractorController extends Controller
                         . $e->getTraceAsString()
                     ]
                 ));
-            $responseObj = RestResponseFactory::error((object) array() , $e->getMessage());
-
-            return $responseObj->toJSON();
         }
     }
 }

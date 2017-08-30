@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+    <meta name="author" content="Amit Merchant">
+    <link rel="icon" href="favicon.ico">
 
     <title>URL Extractor - Amit Merchant</title>
 
@@ -38,7 +38,6 @@
 
     <div class="starter-template">
         <div class="form-group">
-            <h1>URL Extractor</h1>
             <div class="form-group">
                 <form id="urlextractform" class="form-horizontal" role="form" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -51,9 +50,12 @@
             <form id="url_info" role="form" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div id="divUrlFetchInfo"></div>
+                <div id="divUrlLoader" class="hidelement">
+                    <img src="../img/loader.gif" class="animated_loader"/>
+                </div>
                 <div style="clear:both;"></div>
                 <div>
-                    <button type="button" id="submit_url" class="btn btn-success hidden">Save</button>
+                    <button type="button" id="submit_url" class="btn btn-success hidelement">Save</button>
                 </div>
             </form>
         </div>
@@ -61,9 +63,13 @@
         <div class="form-group text-left">
             <h3>URLs stored in the database</h3>
 
-            @foreach ($allUrls as $url)
-                <p><a href="javascript:void(0);" onclick="fetchUrlInfo('{{ $url->url }}')">{{ $url->title }}</a></p>
-            @endforeach
+            @if (count($allUrls)>0)
+                @foreach ($allUrls as $url)
+                    <p><a href="javascript:void(0);" onclick="fetchUrlInfo('{{ $url->url }}')">{{ $url->title }}</a></p>
+                @endforeach
+            @else
+                <p class="no_url_class">No URLs added yet.</p>
+            @endif
 
         </div>
     </div>

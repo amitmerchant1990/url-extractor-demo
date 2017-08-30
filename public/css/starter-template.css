@@ -16,3 +16,16 @@ body {
   border-radius: 5px;
   border: none;
 }
+
+.hidelement{
+  display: none;
+}
+
+img.animated_loader{
+  width: 50px;
+  height: auto;
+}
+
+.no_url_class{
+  color: #717171;
+}
