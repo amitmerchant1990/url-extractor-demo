@@ -8,7 +8,7 @@ To make this up and running locally, do the following:
 $ git clone https://github.com/amitmerchant1990/url-extractor-demo.git
 
 # Go into the repository
-$ cd electron-markdownify
+$ cd url-extractor-demo
 
 # Install dependencies
 $ composer install
