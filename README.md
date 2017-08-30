@@ -1,5 +1,6 @@
 URL Extractor
 =============
+> A Facebook style URL previewer that is built on top of [Laravel](https://laravel.com).
 
 To make this up and running locally, do the following:
 
